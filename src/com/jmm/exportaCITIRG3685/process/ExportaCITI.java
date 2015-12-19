@@ -18,6 +18,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.Normalizer;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -175,7 +176,7 @@ public class ExportaCITI extends SvrProcess {
 		 13 tax.c_cat_citi_id
 		 14 tax.rate
 		 15 ltr.letra
-		 16 tax.wsfecode
+		 16 tax.wsfecode A000412345678
 		 */
 		
 		while(rs.next())
@@ -188,18 +189,18 @@ public class ExportaCITI extends SvrProcess {
 			fecha = getDate(rs.getDate(3));
 			tipo_comp = pad(rs.getString(4), 3, true);
 			pv = pad(rs.getString(5).substring(1, 5), 5, true);
-			nro = pad(rs.getString(5).substring(6, 13), 20, true);
+			nro = pad(rs.getString(5).substring(5, 13), 20, true);
 			cod_doc = rs.getString(6);
 			nro_doc = pad(rs.getString(7).replace("-", ""), 20, true);
 			total = pad(getCnvAmt(rs.getDouble(9)), 15, true);
 			moneda = rs.getString(12);
-			rz = pad(rs.getString(8).toUpperCase(), 30, false);
+			rz = pad(formatString(rs.getString(8).toUpperCase()), 30, false);
 			letra = rs.getString(15);			
 
 			if (letra.equalsIgnoreCase("A") || letra.equalsIgnoreCase("B") ||letra.equalsIgnoreCase("M") || esOtros(tipo_comp)){ 
 				s = new StringBuffer();
 				s.append(tipo_comp);
- 				if (esOtros(tipo_comp))
+ 				if (esOtros(tipo_comp) || tipo_comp.equals("331"))
  	 				s.append("00000");
  				else
  	 				s.append(pv);
@@ -231,7 +232,7 @@ public class ExportaCITI extends SvrProcess {
 			}
 			
 			/*
-			 * AcumulaImportes agrega los montos de impuestos a cada variable. Si devuelve verdadero, es porque
+			 * AcumulaImportes() agrega los montos de impuestos a cada variable. Si devuelve verdadero, es porque
 			 * la próxima línea es de otro comprobante por lo que debo generar la línea del comprobante. Lo mismo
 			 * ocurre si es la última línea del rs.
 			 */
@@ -239,7 +240,7 @@ public class ExportaCITI extends SvrProcess {
 				c = new StringBuffer();
 				c.append(fecha);
 				c.append(tipo_comp);
-				if (esOtros(tipo_comp))
+				if (esOtros(tipo_comp) || tipo_comp.equals("331"))
 					c.append("00000");
 				else
 					c.append(pv);
@@ -280,13 +281,17 @@ public class ExportaCITI extends SvrProcess {
 				if (transaction.equalsIgnoreCase("V"))
 					// TODO: dar soporte para comisiones de corredores
 					c.append("00000000000                              000000000000000");
-				if (!transaction.equalsIgnoreCase("V"))
-					c.append(fecha);
+				if (!transaction.equalsIgnoreCase("V")) 
+					if (tipo_comp.equals("060") || tipo_comp.equals("027") || tipo_comp.equals("028"))
+						c.append("00000000");
+					else
+						c.append(fecha);
 				c.append(lineSeparator);
  				fw_c.write(c.toString());
  				//fw_c.write("\r");
  				c = null;
  				q_alic = 0;
+ 				borraImpuestos();
 			}
 			
 			/*
@@ -318,7 +323,14 @@ public class ExportaCITI extends SvrProcess {
     	DecimalFormat df = new DecimalFormat("#.00");
     	return df.format(amt).replace(".", "").replace(",", "");
     }
-    
+
+    /*
+     * Normalizo y reemplazo caracteres no ASCII por #
+     */
+    private String formatString(String s){
+    	
+    	return Normalizer.normalize(s, Normalizer.Form.NFD).replaceAll("[^\\x00-\\x7F]", "#");
+    }
     /*
      * Agrega la cantidad necesaria de ceros o espacios al inicio del argumento src
      * para completar el largo indicado

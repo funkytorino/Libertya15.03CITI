@@ -85,6 +85,16 @@ public static final String AFIPDOCTYPE_FacturasM = "051";
 public static final String AFIPDOCTYPE_NotasDeDebitoM = "052";
 /** Notas de Credito M = 053 */
 public static final String AFIPDOCTYPE_NotasDeCreditoM = "053";
+
+// Agregado a Mano
+/** Cuenta de venta A = 060 */
+public static final String AFIPDOCTYPE_CuentaDeVentaA = "060";
+/** Cuenta de venta A = 063 */
+public static final String AFIPDOCTYPE_LiquidacionesA = "063";
+/** Liquidacion secundaria = 331 */
+public static final String AFIPDOCTYPE_LiquidacionSecundaria = "331";
+//
+
 /** Tique factura A = 081 */
 public static final String AFIPDOCTYPE_TiqueFacturaA = "081";
 /** Tique factura B = 082 */
@@ -96,8 +106,8 @@ public static final String AFIPDOCTYPE_OtrosComprobantes = "099";
 /** Set Tipo documento CITI */
 public void setafipdoctype (String afipdoctype)
 {
-if (afipdoctype == null || afipdoctype.equals("002") || afipdoctype.equals("003") || afipdoctype.equals("004") || afipdoctype.equals("006") || afipdoctype.equals("007") || afipdoctype.equals("008") || afipdoctype.equals("009") || afipdoctype.equals("010") || afipdoctype.equals("001") || afipdoctype.equals("005") || afipdoctype.equals("011") || afipdoctype.equals("012") || afipdoctype.equals("013") || afipdoctype.equals("015") || afipdoctype.equals("027") || afipdoctype.equals("028") || afipdoctype.equals("029") || afipdoctype.equals("033") || afipdoctype.equals("043") || afipdoctype.equals("044") || afipdoctype.equals("045") || afipdoctype.equals("046") || afipdoctype.equals("047") || afipdoctype.equals("048") || afipdoctype.equals("051") || afipdoctype.equals("052") || afipdoctype.equals("053") || afipdoctype.equals("081") || afipdoctype.equals("082") || afipdoctype.equals("090") || afipdoctype.equals("099"));
- else throw new IllegalArgumentException ("afipdoctype Invalid value - Reference = AFIPDOCTYPE_AD_Reference_ID - 002 - 003 - 004 - 006 - 007 - 008 - 009 - 010 - 001 - 005 - 011 - 012 - 013 - 015 - 027 - 028 - 029 - 033 - 043 - 044 - 045 - 046 - 047 - 048 - 051 - 052 - 053 - 081 - 082 - 090 - 099");
+if (afipdoctype == null || afipdoctype.equals("002") || afipdoctype.equals("003") || afipdoctype.equals("004") || afipdoctype.equals("006") || afipdoctype.equals("007") || afipdoctype.equals("008") || afipdoctype.equals("009") || afipdoctype.equals("010") || afipdoctype.equals("001") || afipdoctype.equals("005") || afipdoctype.equals("011") || afipdoctype.equals("012") || afipdoctype.equals("013") || afipdoctype.equals("015") || afipdoctype.equals("027") || afipdoctype.equals("028") || afipdoctype.equals("029") || afipdoctype.equals("033") || afipdoctype.equals("043") || afipdoctype.equals("044") || afipdoctype.equals("045") || afipdoctype.equals("046") || afipdoctype.equals("047") || afipdoctype.equals("048") || afipdoctype.equals("051") || afipdoctype.equals("052") || afipdoctype.equals("053") || afipdoctype.equals("081") || afipdoctype.equals("082") || afipdoctype.equals("090") || afipdoctype.equals("099") || afipdoctype.equals("060")|| afipdoctype.equals("063")|| afipdoctype.equals("331"));
+ else throw new IllegalArgumentException ("afipdoctype Invalid value - Reference = AFIPDOCTYPE_AD_Reference_ID - 002 - 003 - 004 - 006 - 007 - 008 - 009 - 010 - 001 - 005 - 011 - 012 - 013 - 015 - 027 - 028 - 029 - 033 - 043 - 044 - 045 - 046 - 047 - 048 - 051 - 052 - 053 - 060 - 063 - 081 - 082 - 090 - 099 - 331");
 if (afipdoctype != null && afipdoctype.length() > 3)
 {
 log.warning("Length > 3 - truncated");

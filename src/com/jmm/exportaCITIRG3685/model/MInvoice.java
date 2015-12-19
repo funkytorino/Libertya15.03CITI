@@ -16,10 +16,14 @@
 package com.jmm.exportaCITIRG3685.model;
  
 import java.util.Properties;
+import java.util.logging.Level;
+
 import org.openXpertya.model.PO;
 import org.openXpertya.model.MDocType;
 import org.openXpertya.plugin.MPluginPO;
 import org.openXpertya.plugin.MPluginStatusPO;
+import org.openXpertya.process.SvrProcess;
+import org.openXpertya.util.CLogger;
 
 public class MInvoice extends MPluginPO {
 
@@ -30,6 +34,7 @@ public class MInvoice extends MPluginPO {
 	
 	public MPluginStatusPO postBeforeSave(PO po, boolean newRecord) {
 		LP_C_Invoice lp_invoice = (LP_C_Invoice) po;
+		CLogger log = CLogger.getCLogger(MInvoice.class);;
 		
 		MDocType dt = MDocType.get(po.getCtx(), lp_invoice.getC_DocTypeTarget_ID());
 
@@ -38,8 +43,11 @@ public class MInvoice extends MPluginPO {
 	
 			lp_invoice.setafipdoctype("099");
 		else
-			if ((lp_invoice.isSOTrx()))
+			if ((lp_invoice.isSOTrx())){
+				//log.log(Level.SEVERE,String.format("%1$03d", Integer.parseInt(dt.getdocsubtypecae())));
 				lp_invoice.setafipdoctype(String.format("%1$03d", Integer.parseInt(dt.getdocsubtypecae())));
+			}
+				
 
 		
 		return status_po;
